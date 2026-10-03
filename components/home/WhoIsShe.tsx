@@ -51,7 +51,7 @@ export default function WhoIsShe() {
 
         <div className="reveal relative mx-auto w-full max-w-sm" style={{ "--reveal-delay": "150ms" } as React.CSSProperties}>
           <div className="polaroid rotate-2 transition-transform duration-500 hover:rotate-0">
-            <GradientPhoto src="/images/pic19.jpg" alt="Her portrait" preset="meadow" sizes="600px" className="aspect-[4/5] w-full" />
+            <GradientPhoto src="/images/sona-whoisshe.jpeg" alt="Her portrait" preset="meadow" sizes="600px" className="aspect-[4/5] w-full" />
           </div>
           <p className="absolute -bottom-4 right-2 rotate-[-4deg] font-hand text-2xl text-rose">
             she's not perfect, but perfectly her ♡

@@ -24,12 +24,12 @@ export default function DreamsPage() {
         <div className="container-page relative grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {(
             [
-              { icon: "plane", title: "Places To Visit", text: "Switzerland, Iceland, Paris." },
-              { icon: "briefcase", title: "Career Dreams", text: "Build a life she loves." },
-              { icon: "home", title: "Future Dreams", text: "Cozy home filled with joy and people." },
-              { icon: "heart", title: "Relationship Dreams", text: "A love story worth telling." },
-              { icon: "compass", title: "Experiences", text: "Skydiving, stargazing, new cuisines." },
-              { icon: "award", title: "Achievements", text: "Make her family proud." },
+              { icon: "plane", title: "Places To Visit", text: "Beyond Cuttack — the mountains, the sea, and cities full of colour." },
+              { icon: "briefcase", title: "Career Dreams", text: "Turn her art, photography and creativity into a life she loves." },
+              { icon: "home", title: "Future Dreams", text: "A cosy home in purple, black and silver, filled with joy and people." },
+              { icon: "heart", title: "Relationship Dreams", text: "A love story worth telling — soft, honest, and hers." },
+              { icon: "compass", title: "Experiences", text: "Dance under open skies, capture a thousand moments, taste every momo in sight." },
+              { icon: "award", title: "Achievements", text: "Make her family proud and prove her stubborn heart right." },
             ] as const
           ).map((d, i) => {
             const Icon = ICONS[d.icon];

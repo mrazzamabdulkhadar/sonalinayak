@@ -21,8 +21,8 @@ export default function ThenAndNowPage() {
             nowText="Still dreaming. Just a little bigger now."
             thenPreset="dawn"
             nowPreset="sunset"
-            thenSrc="/images/little-girl.jpg"
-            nowSrc="/images/now-pic.webp"
+            thenSrc="/images/memory/childhood/pic24.jpeg"
+            nowSrc="/images/memory/childhood/pic.jpeg"
           />
           <div className="mt-16">
             <SectionHeading

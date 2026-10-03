@@ -35,6 +35,8 @@ function Petals({ count = 14 }: { count?: number }) {
   );
 }
 
+const HERO_SRC = "/images/homesectionpic.jpeg";
+
 export default function Hero() {
   const [offset, setOffset] = useState(0);
 
@@ -46,39 +48,50 @@ export default function Hero() {
 
   return (
     <section className="relative flex min-h-[100svh] items-center overflow-hidden">
-      {/* her photo, softly blended under a painted dusk */}
-      <div
-        aria-hidden
-        className="absolute inset-0 scale-110"
-        style={{ transform: `translateY(${offset * 0.25}px) scale(1.12)` }}
-      >
+      {/* mobile backdrop: blurred copy of her photo fills the tall screen */}
+      <div aria-hidden className="absolute inset-0 lg:hidden">
         <Image
-          src="/images/home-hero.jpg"
+          src={HERO_SRC}
           alt=""
           fill
           priority
-          sizes="100vw"
-          className="object-cover object-center"
+          quality={75}
+          sizes="50vw"
+          className="scale-110 object-cover blur-2xl"
         />
+        <div className="absolute inset-0 bg-[#1b1119]/70" />
+      </div>
+
+      {/* desktop: full-bleed photo (landscape photo fits wide screens) */}
+      <div
+        aria-hidden
+        className="absolute inset-0 hidden lg:block"
+        style={{ transform: `translateY(${offset * 0.2}px)` }}
+      >
+        <Image
+          src={HERO_SRC}
+          alt=""
+          fill
+          priority
+          quality={100}
+          sizes="100vw"
+          className="object-cover object-[center_30%] [filter:contrast(1.06)_saturate(1.12)]"
+        />
+        {/* dark wash on the text side so the heading stays readable */}
         <div
           className="absolute inset-0"
           style={{
             background:
-              "linear-gradient(180deg,rgba(35,26,56,0.75) 0%,rgba(74,42,78,0.55) 30%,rgba(138,74,99,0.42) 50%,rgba(243,201,165,0.30) 78%,rgba(58,33,54,0.88) 100%)",
+              "linear-gradient(90deg,rgba(27,17,25,0.88) 0%,rgba(35,26,56,0.70) 30%,rgba(58,33,54,0.30) 55%,rgba(0,0,0,0) 75%),linear-gradient(180deg,rgba(27,17,25,0.45) 0%,rgba(0,0,0,0) 25%,rgba(0,0,0,0) 70%,rgba(27,17,25,0.75) 100%)",
           }}
         />
       </div>
-      {/* glow */}
-      <div
-        aria-hidden
-        className="absolute left-[62%] top-[52%] size-56 -translate-x-1/2 rounded-full bg-[#ffd9a0]/45 blur-3xl md:size-80"
-      />
       {/* silhouette field */}
       <svg
         aria-hidden
         viewBox="0 0 1440 500"
         preserveAspectRatio="none"
-        className="absolute inset-x-0 bottom-0 h-[38%] w-full text-[#241726]"
+        className="absolute inset-x-0 bottom-0 h-[18%] w-full text-[#241726] md:h-[26%]"
       >
         <path d="M0 500 L0 320 Q200 220 420 300 Q640 380 860 260 Q1100 130 1300 250 Q1380 295 1440 280 L1440 500 Z" fill="currentColor" />
         <path d="M0 500 L0 420 Q260 350 520 410 Q780 470 1040 390 Q1260 330 1440 400 L1440 500 Z" fill="#1b1119" />
@@ -86,18 +99,31 @@ export default function Hero() {
       <Petals />
 
       <div
-        className="container-page relative pb-28 pt-32"
+        className="container-page relative pb-28 pt-24 md:pt-32 [text-shadow:0_2px_12px_rgba(0,0,0,0.55)]"
         style={{ transform: `translateY(${offset * -0.08}px)`, opacity: 1 - offset / 700 }}
       >
+        {/* mobile: full, uncropped photo (same framing as desktop) */}
+        <div className="relative mb-8 aspect-[1251/720] w-full overflow-hidden rounded-2xl shadow-[0_20px_50px_-15px_rgba(0,0,0,0.7)] ring-1 ring-white/15 lg:hidden">
+          <Image
+            src={HERO_SRC}
+            alt="Sona"
+            fill
+            priority
+            quality={100}
+            sizes="100vw"
+            className="object-cover [filter:contrast(1.06)_saturate(1.12)]"
+          />
+        </div>
+
         <p className="font-hand text-2xl text-blush md:text-3xl">Her Story</p>
         <h1 className="mt-4 max-w-2xl font-display text-4xl font-semibold leading-[1.15] text-mooncream sm:text-5xl md:text-6xl">
           Some stories are written in words...
-          <span className="mt-3 block font-light italic text-blush">
+          <span className="mt-3 block font-normal italic text-[#ffc9d6]">
             hers was written in moments.{" "}
-            <Heart className="mb-2 inline size-6 fill-blush text-blush md:size-8" />
+            <Heart className="mb-2 inline size-6 fill-[#ffc9d6] text-[#ffc9d6] md:size-8" />
           </span>
         </h1>
-        <p className="mt-6 max-w-md text-sm leading-relaxed text-mooncream/75 md:text-base">
+        <p className="mt-6 max-w-md text-sm leading-relaxed text-mooncream/90 md:text-base">
           A little collection of her memories, her smiles, her dreams, and
           everything that makes her... her.
         </p>

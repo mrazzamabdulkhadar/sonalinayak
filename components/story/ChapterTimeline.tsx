@@ -73,7 +73,9 @@ export default function ChapterTimeline({ items }: { items: Chapter[] }) {
                     alt={c.title}
                     preset={c.preset}
                     caption={c.year}
-                    className="aspect-[4/3] w-full transition-transform duration-700 hover:scale-[1.02]"
+                    fit="cover"
+                    sizes="(max-width: 768px) 100vw, 384px"
+                    className="aspect-[3/4] w-full transition-transform duration-700 hover:scale-[1.02]"
                   />
                 </div>
                 <div

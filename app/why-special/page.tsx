@@ -26,10 +26,18 @@ export default function WhySpecialPage() {
                 {w.num}
               </p>
               <GradientPhoto
-                src={["/images/pic2.jpg", "/images/pic6.jpg", "/images/pic11.jpg", "/images/pic14.jpg", "/images/pic17.jpg", "/images/home-hero.jpg"][i % 6]}
+                src={[
+                  "/images/memory/childhood/pic1.jpeg",
+                  "/images/memory/childhood/pic18.jpeg",
+                  "/images/memory/family/pic.jpeg",
+                  "/images/memory/childhood/pic32.jpeg",
+                  "/images/memory/childhood/pic12.jpeg",
+                  "/images/memory/childhood/pic38.jpeg",
+                ][i % 6]}
                 alt={w.title}
                 preset={["dawn", "bloom", "meadow", "sunset", "sea", "night"][i % 6]}
                 sizes="160px"
+                fit="cover"
                 className="hidden aspect-square md:block"
               />
               <div>

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import PageHero from "@/components/ui/PageHero";
 import MemoriesGrid from "@/components/gallery/MemoriesGrid";
-import { memories } from "@/data/story";
+import { memories } from "@/data/memories";
 
 export const metadata: Metadata = { title: "Gallery" };
 

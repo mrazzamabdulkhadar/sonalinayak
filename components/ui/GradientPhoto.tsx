@@ -36,6 +36,7 @@ export default function GradientPhoto({
   rounded = "rounded-lg",
   sizes = "(max-width: 768px) 100vw, 50vw",
   priority = false,
+  fit = "cover",
 }: {
   src?: string;
   alt?: string;
@@ -46,6 +47,7 @@ export default function GradientPhoto({
   rounded?: string;
   sizes?: string;
   priority?: boolean;
+  fit?: "cover" | "contain";
 }) {
   const p = PRESETS[preset] ?? PRESETS.sunset;
   return (
@@ -61,7 +63,7 @@ export default function GradientPhoto({
           sizes={sizes}
           priority={priority}
           draggable={false}
-          className="object-cover"
+          className={fit === "contain" ? "object-contain" : "object-cover"}
         />
       ) : (
         <>

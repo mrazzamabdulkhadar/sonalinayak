@@ -28,9 +28,13 @@ export default function PeoplePage() {
                     className="reveal group overflow-hidden rounded-3xl border border-blush/70 bg-white shadow-[var(--shadow-polaroid)] transition-all duration-500 hover:-translate-y-1.5"
                   >
                     <GradientPhoto
+                      src={m.src}
+                      alt={m.name}
                       preset={m.preset}
                       rounded="rounded-none"
-                      className="aspect-[4/3] w-full transition-transform duration-700 group-hover:scale-105"
+                      fit="cover"
+                      sizes="(max-width: 640px) 100vw, 300px"
+                      className="aspect-[4/5] w-full transition-transform duration-700 group-hover:scale-105 [&_img]:object-top"
                     />
                     <div className="p-5">
                       <h3 className="font-display text-lg font-semibold text-burgundy">{m.name}</h3>

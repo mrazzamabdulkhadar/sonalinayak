@@ -43,6 +43,29 @@
   from { transform: translateY(0) translateX(0); }
   to { transform: translateY(-105vh) translateX(4vw); }
 }
+@keyframes eq {
+  0%, 100% { height: 25%; }
+  50% { height: 95%; }
+}
+
+/* Animated equalizer bars for the now-playing track */
+.eq-bar {
+  height: 60%;
+  animation: eq 900ms ease-in-out infinite;
+}
+
+/* Hide scrollbars on horizontally scrollable rows (e.g. the song tabs) */
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .eq-bar { animation: none; }
+}
 
 html {
   scroll-behavior: smooth;

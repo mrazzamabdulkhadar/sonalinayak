@@ -7,7 +7,8 @@ import MemoriesGrid from "@/components/gallery/MemoriesGrid";
 import QuoteCarousel from "@/components/quotes/QuoteCarousel";
 import SectionHeading from "@/components/ui/SectionHeading";
 import GradientPhoto from "@/components/ui/GradientPhoto";
-import { chapters, memories, shayari } from "@/data/story";
+import { chapters, shayari } from "@/data/story";
+import { memories } from "@/data/memories";
 
 export default function HomePage() {
   return (
@@ -47,7 +48,7 @@ export default function HomePage() {
             subtitle="Some days are small. Some days become everything."
           />
           <div className="mt-14">
-            <MemoriesGrid items={memories.slice(0, 6)} showFilters={false} />
+            <MemoriesGrid items={memories.slice(0, 12)} showFilters={false} />
           </div>
           <div className="mt-12 text-center">
             <Link

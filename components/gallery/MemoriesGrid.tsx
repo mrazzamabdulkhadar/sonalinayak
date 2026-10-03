@@ -1,10 +1,11 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
-import { ChevronLeft, ChevronRight, MapPin, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import GradientPhoto from "@/components/ui/GradientPhoto";
-import { memoryCategories, type Memory } from "@/data/story";
+import { type Memory } from "@/data/story";
 import { playClick, playOpen } from "@/lib/sounds";
 
 export default function MemoriesGrid({
@@ -16,6 +17,16 @@ export default function MemoriesGrid({
 }) {
   const [cat, setCat] = useState("All");
   const [active, setActive] = useState<number | null>(null);
+
+  // Categories are derived from the photos actually present, so the filter
+  // bar only ever shows tabs that have images behind them.
+  const memoryCategories = useMemo(() => {
+    const seen: string[] = [];
+    for (const m of items) {
+      if (!seen.includes(m.category)) seen.push(m.category);
+    }
+    return ["All", ...seen];
+  }, [items]);
 
   const filtered = useMemo(
     () => (cat === "All" ? items : items.filter((m) => m.category === cat)),
@@ -71,7 +82,7 @@ export default function MemoriesGrid({
         </div>
       )}
 
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4">
+      <div className="columns-2 gap-4 md:columns-3 xl:columns-4 [column-fill:balance]">
         <AnimatePresence mode="popLayout">
           {filtered.map((m, i) => (
             <motion.button
@@ -85,21 +96,28 @@ export default function MemoriesGrid({
                 setActive(i);
                 playOpen();
               }}
-              className="group block w-full break-inside-avoid text-left focus-visible:outline-none"
+              className="group mb-4 block w-full break-inside-avoid text-left focus-visible:outline-none"
               aria-label={`Open memory: ${m.title}`}
             >
-              <div className="overflow-hidden rounded-xl shadow-[var(--shadow-polaroid)] transition-transform duration-500 group-hover:-translate-y-1 group-hover:rotate-[0.5deg]">
+              <div
+                className="relative w-full overflow-hidden rounded-xl shadow-[var(--shadow-polaroid)] transition-transform duration-500 group-hover:-translate-y-1 group-hover:rotate-[0.5deg]"
+                style={{ aspectRatio: m.ratio ?? 1 }}
+              >
                 <GradientPhoto
                   src={m.src}
                   alt={m.title}
                   preset={m.preset}
+                  fit="cover"
                   sizes="(max-width: 768px) 50vw, 25vw"
-                  className="w-full aspect-square transition-transform duration-700 group-hover:scale-105"
+                  className="h-full w-full transition-transform duration-700 group-hover:scale-105"
                 />
-              </div>
-              <div className="mt-2.5 px-1">
-                <p className="text-sm font-semibold text-burgundy">{m.title}</p>
-                <p className="text-xs text-muted">{m.date}</p>
+                {/* caption overlay — fades in on hover */}
+                <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 via-black/25 to-transparent p-3 pt-10 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                  <p className="text-sm font-semibold text-white">{m.title}</p>
+                  {m.date && m.date !== m.title && (
+                    <p className="text-xs text-white/75">{m.date}</p>
+                  )}
+                </div>
               </div>
             </motion.button>
           ))}
@@ -127,11 +145,26 @@ export default function MemoriesGrid({
               className="relative w-full max-w-3xl"
               onClick={(e) => e.stopPropagation()}
             >
-              <GradientPhoto src={current.src} alt={current.title} preset={current.preset} className="aspect-[16/10] w-full rounded-2xl" rounded="rounded-2xl" />
+              {current.src ? (
+                <div className="relative mx-auto flex max-h-[72vh] w-full items-center justify-center">
+                  <Image
+                    src={current.src}
+                    alt={current.title}
+                    width={1200}
+                    height={1600}
+                    sizes="(max-width: 768px) 92vw, 768px"
+                    className="h-auto max-h-[72vh] w-auto max-w-full rounded-2xl object-contain shadow-2xl"
+                  />
+                </div>
+              ) : (
+                <GradientPhoto src={current.src} alt={current.title} preset={current.preset} className="aspect-[16/10] w-full rounded-2xl" rounded="rounded-2xl" />
+              )}
               <figcaption className="mx-auto mt-5 max-w-xl text-center">
                 <p className="font-display text-2xl font-semibold text-mooncream">{current.title}</p>
                 <p className="mt-1 text-xs uppercase tracking-[0.2em] text-nightrose">
-                  {current.date} · {current.category}
+                  {current.date && current.date !== current.category
+                    ? `${current.date} · ${current.category}`
+                    : current.category}
                 </p>
                 <p className="mt-3 text-sm leading-relaxed text-mooncream/70">{current.note}</p>
               </figcaption>

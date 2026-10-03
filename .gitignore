@@ -39,3 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# source-original media (not used by the app; public/ holds the shipped copies)
+/assets
+
+# kilo tool worktrees
+/.kilo
