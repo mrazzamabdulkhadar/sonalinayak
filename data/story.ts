@@ -168,6 +168,7 @@ export type Song = {
   duration: string;
   preset: string;
   audio: string;
+  cover?: string;
   tab: SongTab;
 };
 
@@ -175,40 +176,40 @@ export const songTabs: SongTab[] = ["Around Her", "Reminds Me of Her", "Your Son
 
 export const songs: Song[] = [
   // Around Her — the ones that simply feel like her
-  { id: "s1", title: "Aaj Phir", artist: "Arijit Singh", reason: "Because every heartbeat hums her name.", duration: "3:56", preset: "sunset", audio: "/songs/aaj-phir.mp3", tab: "Around Her" },
-  { id: "s2", title: "Pehli Dafa", artist: "Atif Aslam", reason: "Because first meetings change everything.", duration: "4:15", preset: "dawn", audio: "/songs/pehli-dafa.mp3", tab: "Around Her" },
-  { id: "s3", title: "Tujhe Main Pyar Karoon", artist: "Kailash Kher", reason: "Because loving her is the easiest thing.", duration: "4:19", preset: "meadow", audio: "/songs/tujhe-main-pyar-karoon.mp3", tab: "Around Her" },
-  { id: "s4", title: "Tera Mera Hai Pyar Amar", artist: "Ahmed Jahanzeb", reason: "Because this love story deserves an OST.", duration: "3:08", preset: "bloom", audio: "/songs/tera-mera-pyar-amar.mp3", tab: "Around Her" },
-  { id: "s5", title: "From the Start", artist: "Laufey", reason: "Soft, honest, and a little in love.", duration: "2:26", preset: "dawn", audio: "/songs/from-the-start.mp3", tab: "Around Her" },
+  { id: "s1", title: "Aaj Phir", artist: "Arijit Singh", reason: "Because every heartbeat hums her name.", duration: "3:56", preset: "sunset", audio: "/songs/aaj-phir.mp3", cover: "/songs/songthumbnails/pic1.png", tab: "Around Her" },
+  { id: "s2", title: "Pehli Dafa", artist: "Atif Aslam", reason: "Because first meetings change everything.", duration: "4:15", preset: "dawn", audio: "/songs/pehli-dafa.mp3", cover: "/songs/songthumbnails/pic2.png", tab: "Around Her" },
+  { id: "s3", title: "Tujhe Main Pyar Karoon", artist: "Kailash Kher", reason: "Because loving her is the easiest thing.", duration: "4:19", preset: "meadow", audio: "/songs/tujhe-main-pyar-karoon.mp3", cover: "/songs/songthumbnails/pic3.png", tab: "Around Her" },
+  { id: "s4", title: "Tera Mera Hai Pyar Amar", artist: "Ahmed Jahanzeb", reason: "Because this love story deserves an OST.", duration: "3:08", preset: "bloom", audio: "/songs/tera-mera-pyar-amar.mp3", cover: "/songs/songthumbnails/pic4.png", tab: "Around Her" },
+  { id: "s5", title: "From the Start", artist: "Laufey", reason: "Soft, honest, and a little in love.", duration: "2:26", preset: "dawn", audio: "/songs/from-the-start.mp3", cover: "/songs/songthumbnails/pic5.png", tab: "Around Her" },
 
   // Reminds Me of Her — songs that pull her into frame
-  { id: "s6", title: "Broken Angel", artist: "Arash feat. Helena", reason: "The song that feels like her voice.", duration: "4:16", preset: "night", audio: "/songs/broken-angel.mp3", tab: "Reminds Me of Her" },
-  { id: "s7", title: "Favorite", artist: "Isabel LaRosa", reason: "Because she's the one on repeat.", duration: "2:12", preset: "night", audio: "/songs/favorite.mp3", tab: "Reminds Me of Her" },
-  { id: "s8", title: "Collide", artist: "Justine Skye ft. Tyga", reason: "For the way everything lines up around her.", duration: "4:24", preset: "sea", audio: "/songs/collide.mp3", tab: "Reminds Me of Her" },
-  { id: "s9", title: "Harleys in Hawaii", artist: "Katy Perry", reason: "Slow rides and warmer evenings with her.", duration: "4:58", preset: "sunset", audio: "/songs/harleys-in-hawaii.mp3", tab: "Reminds Me of Her" },
-  { id: "s10", title: "I'm Yours", artist: "Jason Mraz", reason: "Because the answer was always her.", duration: "3:02", preset: "meadow", audio: "/songs/im-yours.mp3", tab: "Reminds Me of Her" },
+  { id: "s6", title: "Broken Angel", artist: "Arash feat. Helena", reason: "The song that feels like her voice.", duration: "4:16", preset: "night", audio: "/songs/broken-angel.mp3", cover: "/songs/songthumbnails/pic6.png", tab: "Reminds Me of Her" },
+  { id: "s7", title: "Favorite", artist: "Isabel LaRosa", reason: "Because she's the one on repeat.", duration: "2:12", preset: "night", audio: "/songs/favorite.mp3", cover: "/songs/songthumbnails/pic7.png", tab: "Reminds Me of Her" },
+  { id: "s8", title: "Collide", artist: "Justine Skye ft. Tyga", reason: "For the way everything lines up around her.", duration: "4:24", preset: "sea", audio: "/songs/collide.mp3", cover: "/songs/songthumbnails/pic8.png", tab: "Reminds Me of Her" },
+  { id: "s9", title: "Harleys in Hawaii", artist: "Katy Perry", reason: "Slow rides and warmer evenings with her.", duration: "4:58", preset: "sunset", audio: "/songs/harleys-in-hawaii.mp3", cover: "/songs/songthumbnails/pic9.png", tab: "Reminds Me of Her" },
+  { id: "s10", title: "I'm Yours", artist: "Jason Mraz", reason: "Because the answer was always her.", duration: "3:02", preset: "meadow", audio: "/songs/im-yours.mp3", cover: "/songs/songthumbnails/pic10.png", tab: "Reminds Me of Her" },
 
   // Your Song — the ones that are hers to keep
-  { id: "s11", title: "Kangna Tera Ni", artist: "Lashkare", reason: "Because she looks perfect in every rhythm.", duration: "3:50", preset: "bloom", audio: "/songs/kangna-tera-ni.mp3", tab: "Your Song" },
-  { id: "s12", title: "Despacito", artist: "Luis Fonsi ft. Daddy Yankee", reason: "For the days she dances without a care.", duration: "4:41", preset: "sea", audio: "/songs/despacito.mp3", tab: "Your Song" },
-  { id: "s13", title: "Espresso", artist: "Sabrina Carpenter", reason: "Her kind of fun, bottled into a beat.", duration: "3:35", preset: "sunset", audio: "/songs/espresso.mp3", tab: "Your Song" },
-  { id: "s14", title: "Gata Only", artist: "FloyyMenor ft. Cris MJ", reason: "The one she can't sit still through.", duration: "3:42", preset: "night", audio: "/songs/gata-only.mp3", tab: "Your Song" },
-  { id: "s15", title: "Shake It to the Max", artist: "MOLIY, Shenseea & co.", reason: "Pure joy, turned all the way up.", duration: "4:14", preset: "bloom", audio: "/songs/shake-it-to-the-max.mp3", tab: "Your Song" },
-  { id: "s16", title: "Peligrosa", artist: "FloyyMenor", reason: "A little bit of her mischief in a song.", duration: "2:46", preset: "sea", audio: "/songs/peligrosa.mp3", tab: "Your Song" },
+  { id: "s11", title: "Kangna Tera Ni", artist: "Lashkare", reason: "Because she looks perfect in every rhythm.", duration: "3:50", preset: "bloom", audio: "/songs/kangna-tera-ni.mp3", cover: "/songs/songthumbnails/pic11.png", tab: "Your Song" },
+  { id: "s12", title: "Despacito", artist: "Luis Fonsi ft. Daddy Yankee", reason: "For the days she dances without a care.", duration: "4:41", preset: "sea", audio: "/songs/despacito.mp3", cover: "/songs/songthumbnails/pic12.png", tab: "Your Song" },
+  { id: "s13", title: "Espresso", artist: "Sabrina Carpenter", reason: "Her kind of fun, bottled into a beat.", duration: "3:35", preset: "sunset", audio: "/songs/espresso.mp3", cover: "/songs/songthumbnails/pic13.png", tab: "Your Song" },
+  { id: "s14", title: "Gata Only", artist: "FloyyMenor ft. Cris MJ", reason: "The one she can't sit still through.", duration: "3:42", preset: "night", audio: "/songs/gata-only.mp3", cover: "/songs/songthumbnails/pic14.png", tab: "Your Song" },
+  { id: "s15", title: "Shake It to the Max", artist: "MOLIY, Shenseea & co.", reason: "Pure joy, turned all the way up.", duration: "4:14", preset: "bloom", audio: "/songs/shake-it-to-the-max.mp3", cover: "/songs/songthumbnails/pic15.png", tab: "Your Song" },
+  { id: "s16", title: "Peligrosa", artist: "FloyyMenor", reason: "A little bit of her mischief in a song.", duration: "2:46", preset: "sea", audio: "/songs/peligrosa.mp3", cover: "/songs/songthumbnails/pic16.png", tab: "Your Song" },
 
   // Late Night Songs — the quieter, darker, deeper hours
-  { id: "s17", title: "Labon Ko", artist: "K.K.", reason: "Because some songs are felt, not heard.", duration: "4:29", preset: "night", audio: "/songs/labon-ko.mp3", tab: "Late Night Songs" },
-  { id: "s18", title: "Under the Influence", artist: "Chris Brown", reason: "For the late, unhurried kind of nights.", duration: "4:04", preset: "night", audio: "/songs/under-the-influence.mp3", tab: "Late Night Songs" },
-  { id: "s19", title: "Unholy", artist: "Sam Smith & Kim Petras", reason: "The darker glow after midnight.", duration: "4:14", preset: "night", audio: "/songs/unholy.mp3", tab: "Late Night Songs" },
-  { id: "s20", title: "Killshot (Slowed + Reverb)", artist: "Magdalena Bay", reason: "Dreamy, slow, and a little lost in it.", duration: "4:35", preset: "sea", audio: "/songs/killshot.mp3", tab: "Late Night Songs" },
-  { id: "s21", title: "I Wanna Be Your Slave", artist: "Måneskin", reason: "For the nights with a little more fire.", duration: "2:52", preset: "night", audio: "/songs/i-wanna-be-your-slave.mp3", tab: "Late Night Songs" },
-  { id: "s22", title: "YAD (English Version)", artist: "YAD", reason: "A moody loop for the small hours.", duration: "2:58", preset: "sea", audio: "/songs/yad.mp3", tab: "Late Night Songs" },
+  { id: "s17", title: "Labon Ko", artist: "K.K.", reason: "Because some songs are felt, not heard.", duration: "4:29", preset: "night", audio: "/songs/labon-ko.mp3", cover: "/songs/songthumbnails/pic17.png", tab: "Late Night Songs" },
+  { id: "s18", title: "Under the Influence", artist: "Chris Brown", reason: "For the late, unhurried kind of nights.", duration: "4:04", preset: "night", audio: "/songs/under-the-influence.mp3", cover: "/songs/songthumbnails/pic18.png", tab: "Late Night Songs" },
+  { id: "s19", title: "Unholy", artist: "Sam Smith & Kim Petras", reason: "The darker glow after midnight.", duration: "4:14", preset: "night", audio: "/songs/unholy.mp3", cover: "/songs/songthumbnails/pic19.png", tab: "Late Night Songs" },
+  { id: "s20", title: "Killshot (Slowed + Reverb)", artist: "Magdalena Bay", reason: "Dreamy, slow, and a little lost in it.", duration: "4:35", preset: "sea", audio: "/songs/killshot.mp3", cover: "/songs/songthumbnails/pic20.png", tab: "Late Night Songs" },
+  { id: "s21", title: "I Wanna Be Your Slave", artist: "Måneskin", reason: "For the nights with a little more fire.", duration: "2:52", preset: "night", audio: "/songs/i-wanna-be-your-slave.mp3", cover: "/songs/songthumbnails/pic21.png", tab: "Late Night Songs" },
+  { id: "s22", title: "YAD (English Version)", artist: "YAD", reason: "A moody loop for the small hours.", duration: "2:58", preset: "sea", audio: "/songs/yad.mp3", cover: "/songs/songthumbnails/pic22.png", tab: "Late Night Songs" },
 
   // Childhood Songs — the carefree, nostalgic playlist
-  { id: "s23", title: "Criminal", artist: "Britney Spears", reason: "A throwback that never grows up.", duration: "3:43", preset: "dawn", audio: "/songs/criminal.mp3", tab: "Childhood Songs" },
-  { id: "s24", title: "Gangsta", artist: "Karan Aujla", reason: "The one that owns the whole room.", duration: "3:12", preset: "sunset", audio: "/songs/gangsta.mp3", tab: "Childhood Songs" },
-  { id: "s25", title: "Angels in Tibet", artist: "Amaarae", reason: "Light, playful, and endlessly repeatable.", duration: "2:42", preset: "meadow", audio: "/songs/angels-in-tibet.mp3", tab: "Childhood Songs" },
-  { id: "s26", title: "Sad Girlz Luv Money", artist: "Amaarae ft. Kali Uchis", reason: "Carefree energy for the good days.", duration: "5:06", preset: "bloom", audio: "/songs/sad-girlz-luv-money.mp3", tab: "Childhood Songs" },
+  { id: "s23", title: "Criminal", artist: "Britney Spears", reason: "A throwback that never grows up.", duration: "3:43", preset: "dawn", audio: "/songs/criminal.mp3", cover: "/songs/songthumbnails/pic23.png", tab: "Childhood Songs" },
+  { id: "s24", title: "Gangsta", artist: "Karan Aujla", reason: "The one that owns the whole room.", duration: "3:12", preset: "sunset", audio: "/songs/gangsta.mp3", cover: "/songs/songthumbnails/pic24.png", tab: "Childhood Songs" },
+  { id: "s25", title: "Angels in Tibet", artist: "Amaarae", reason: "Light, playful, and endlessly repeatable.", duration: "2:42", preset: "meadow", audio: "/songs/angels-in-tibet.mp3", cover: "/songs/songthumbnails/pic25.png", tab: "Childhood Songs" },
+  { id: "s26", title: "Sad Girlz Luv Money", artist: "Amaarae ft. Kali Uchis", reason: "Carefree energy for the good days.", duration: "5:06", preset: "bloom", audio: "/songs/sad-girlz-luv-money.mp3", cover: "/songs/songthumbnails/pic26.png", tab: "Childhood Songs" },
 ];
 
 export type Letter = { id: string; title: string; preview: string; body: string[]; signature: string };

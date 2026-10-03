@@ -1,7 +1,15 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Heart, Pause, Play, SkipBack, SkipForward, Volume2 } from "lucide-react";
+import {
+  Heart,
+  Pause,
+  Play,
+  SkipBack,
+  SkipForward,
+  Volume2,
+  VolumeX,
+} from "lucide-react";
 import type { Song, SongTab } from "@/data/story";
 import { songTabs } from "@/data/story";
 import GradientPhoto from "@/components/ui/GradientPhoto";
@@ -46,6 +54,17 @@ export default function SongList({ songs }: { songs: Song[] }) {
   const [time, setTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [liked, setLiked] = useState<Set<string>>(new Set());
+
+  // ── volume / mute ───────────────────────────────────────
+  const [volume, setVolume] = useState(1); // 0-1
+  const [muted, setMuted] = useState(false);
+  const lastVolume = useRef(1); // remember level to restore after unmute
+
+  // ── seek dragging ───────────────────────────────────────
+  const [dragging, setDragging] = useState(false);
+  const [dragPct, setDragPct] = useState(0);
+  const seekRef = useRef<HTMLDivElement | null>(null);
+
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const current = useMemo(() => queue.findIndex((s) => s.id === currentId), [queue, currentId]);
@@ -81,32 +100,98 @@ export default function SongList({ songs }: { songs: Song[] }) {
     else audio.pause();
   }, [playing]);
 
+  // keep the <audio> element in sync with volume / mute state
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    audio.volume = volume;
+    audio.muted = muted;
+  }, [volume, muted]);
+
   const step = useCallback(
     (dir: 1 | -1) => {
       if (!queue.length) return;
       const i = queue.findIndex((s) => s.id === currentId);
       const next = (i + dir + queue.length) % queue.length;
       setCurrentId(queue[next].id);
+      setPlaying(true);
     },
     [queue, currentId]
   );
 
-  const onEnded = useCallback(() => step(1), [step]);
+  // when a track finishes naturally, roll on to the next one
+  const onEnded = useCallback(() => {
+    if (!queue.length) return;
+    const i = queue.findIndex((s) => s.id === currentId);
+    const next = (i + 1) % queue.length;
+    setCurrentId(queue[next].id);
+    setPlaying(true);
+  }, [queue, currentId]);
 
   const select = (id: string) => {
     if (id === currentId) {
+      // same track → just toggle; never restart from the top
       setPlaying((p) => !p);
     } else {
+      // user switched tracks on purpose → start the new one
       setCurrentId(id);
       setPlaying(true);
     }
     playClick();
   };
 
-  const seek = (pct: number) => {
+  const seekToPct = (pct: number) => {
     const audio = audioRef.current;
+    const clamped = Math.min(100, Math.max(0, pct));
     if (!audio || !Number.isFinite(audio.duration) || audio.duration === 0) return;
-    audio.currentTime = (pct / 100) * audio.duration;
+    audio.currentTime = (clamped / 100) * audio.duration;
+    setProgress(clamped);
+    setTime((clamped / 100) * audio.duration);
+  };
+
+  // translate a pointer x-position into a 0-100 percentage of the bar
+  const pctFromClientX = useCallback((clientX: number) => {
+    const bar = seekRef.current;
+    if (!bar) return 0;
+    const rect = bar.getBoundingClientRect();
+    return Math.min(100, Math.max(0, ((clientX - rect.left) / rect.width) * 100));
+  }, []);
+
+  // drag-to-seek: track the pointer while held, commit on release
+  useEffect(() => {
+    if (!dragging) return;
+    const move = (e: PointerEvent) => setDragPct(pctFromClientX(e.clientX));
+    const up = (e: PointerEvent) => {
+      seekToPct(pctFromClientX(e.clientX));
+      setDragging(false);
+    };
+    window.addEventListener("pointermove", move);
+    window.addEventListener("pointerup", up);
+    return () => {
+      window.removeEventListener("pointermove", move);
+      window.removeEventListener("pointerup", up);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dragging, pctFromClientX]);
+
+  const toggleMute = () => {
+    setMuted((m) => {
+      const next = !m;
+      if (next) {
+        lastVolume.current = volume || 1;
+      } else if (volume === 0) {
+        setVolume(lastVolume.current || 1);
+      }
+      return next;
+    });
+    playClick();
+  };
+
+  const changeVolume = (v: number) => {
+    const clamped = Math.min(1, Math.max(0, v));
+    setVolume(clamped);
+    setMuted(clamped === 0);
+    if (clamped > 0) lastVolume.current = clamped;
   };
 
   const toggleLike = (id: string) => {
@@ -119,12 +204,17 @@ export default function SongList({ songs }: { songs: Song[] }) {
     playClick();
   };
 
+  // what the seek bar should display: the live drag value while dragging
+  const shownPct = dragging ? dragPct : progress;
+  const shownTime = dragging && duration ? (dragPct / 100) * duration : time;
+
   return (
     <div className="mx-auto max-w-2xl">
       <audio
         ref={audioRef}
         onEnded={onEnded}
         onTimeUpdate={(e) => {
+          if (dragging) return; // don't fight the user's drag
           const a = e.currentTarget;
           setTime(a.currentTime);
           if (a.duration) setProgress((a.currentTime / a.duration) * 100);
@@ -191,7 +281,14 @@ export default function SongList({ songs }: { songs: Song[] }) {
                   aria-label={`${isPlaying ? "Pause" : "Play"} ${s.title}`}
                   className="group relative size-12 shrink-0 overflow-hidden rounded-xl md:size-14"
                 >
-                  <GradientPhoto preset={s.preset} rounded="rounded-none" className="h-full w-full" />
+                  <GradientPhoto
+                    src={s.cover}
+                    alt={`${s.title} — ${s.artist}`}
+                    preset={s.preset}
+                    rounded="rounded-none"
+                    className="h-full w-full"
+                    sizes="56px"
+                  />
                   <span
                     className={`absolute inset-0 grid place-items-center bg-black/40 backdrop-blur-[2px] transition-opacity ${
                       isCurrent ? "opacity-100" : "opacity-0 group-hover:opacity-100"
@@ -237,7 +334,14 @@ export default function SongList({ songs }: { songs: Song[] }) {
         <div className="flex items-center gap-3">
           {/* now-playing artwork */}
           <div className="relative size-11 shrink-0 overflow-hidden rounded-lg">
-            <GradientPhoto preset={song?.preset ?? "sunset"} rounded="rounded-none" className="h-full w-full" />
+            <GradientPhoto
+              src={song?.cover}
+              alt={song ? `${song.title} — ${song.artist}` : "Now playing"}
+              preset={song?.preset ?? "sunset"}
+              rounded="rounded-none"
+              className="h-full w-full"
+              sizes="44px"
+            />
             {playing && (
               <span className="absolute inset-0 grid place-items-center bg-black/35">
                 <Equalizer animate />
@@ -263,29 +367,75 @@ export default function SongList({ songs }: { songs: Song[] }) {
           <button aria-label="Next song" onClick={() => { step(1); playClick(); }} className="rounded-full p-2 text-mooncream/70 transition-colors hover:text-nightrose">
             <SkipForward className="size-4" />
           </button>
-          <Volume2 className="hidden size-4 text-mooncream/40 sm:block" />
+
+          {/* mute / unmute + volume slider */}
+          <div className="group/vol hidden items-center gap-1.5 sm:flex">
+            <button
+              aria-label={muted || volume === 0 ? "Unmute" : "Mute"}
+              aria-pressed={muted || volume === 0}
+              onClick={toggleMute}
+              className="rounded-full p-2 text-mooncream/60 transition-colors hover:text-nightrose"
+            >
+              {muted || volume === 0 ? <VolumeX className="size-4" /> : <Volume2 className="size-4" />}
+            </button>
+            <input
+              type="range"
+              min={0}
+              max={1}
+              step={0.01}
+              value={muted ? 0 : volume}
+              onChange={(e) => changeVolume(Number(e.target.value))}
+              aria-label="Volume"
+              className="h-1 w-0 cursor-pointer appearance-none rounded-full bg-white/15 opacity-0 transition-all duration-200 accent-nightrose group-hover/vol:w-20 group-hover/vol:opacity-100 focus-visible:w-20 focus-visible:opacity-100"
+            />
+          </div>
+          {/* compact mute toggle on small screens */}
+          <button
+            aria-label={muted || volume === 0 ? "Unmute" : "Mute"}
+            aria-pressed={muted || volume === 0}
+            onClick={toggleMute}
+            className="rounded-full p-2 text-mooncream/60 transition-colors hover:text-nightrose sm:hidden"
+          >
+            {muted || volume === 0 ? <VolumeX className="size-4" /> : <Volume2 className="size-4" />}
+          </button>
         </div>
 
         <div className="mt-3 flex items-center gap-2">
-          <span className="w-10 text-right text-[10px] tabular-nums text-mooncream/40">{fmt(time)}</span>
+          <span className="w-10 text-right text-[10px] tabular-nums text-mooncream/40">{fmt(shownTime)}</span>
           <div
-            className="group/seek h-1.5 flex-1 cursor-pointer overflow-hidden rounded-full bg-white/10"
-            onClick={(e) => {
-              const rect = e.currentTarget.getBoundingClientRect();
-              seek(((e.clientX - rect.left) / rect.width) * 100);
+            ref={seekRef}
+            className="group/seek relative h-4 flex-1 cursor-pointer touch-none select-none"
+            onPointerDown={(e) => {
+              e.preventDefault();
+              const pct = pctFromClientX(e.clientX);
+              setDragPct(pct);
+              setDragging(true);
             }}
-            role="progressbar"
+            role="slider"
             aria-label="Seek"
-            aria-valuenow={Math.round(progress)}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-valuenow={Math.round(shownPct)}
             tabIndex={0}
             onKeyDown={(e) => {
-              if (e.key === "ArrowRight") seek(Math.min(progress + 5, 100));
-              if (e.key === "ArrowLeft") seek(Math.max(progress - 5, 0));
+              if (e.key === "ArrowRight") seekToPct(shownPct + 5);
+              if (e.key === "ArrowLeft") seekToPct(shownPct - 5);
             }}
           >
-            <div
-              className="h-full rounded-full bg-gradient-to-r from-nightrose to-blush transition-[width] duration-150 group-hover/seek:brightness-110"
-              style={{ width: `${progress}%` }}
+            {/* track */}
+            <div className="absolute inset-x-0 top-1/2 h-1.5 -translate-y-1/2 overflow-hidden rounded-full bg-white/10">
+              <div
+                className="h-full rounded-full bg-gradient-to-r from-nightrose to-blush group-hover/seek:brightness-110"
+                style={{ width: `${shownPct}%` }}
+              />
+            </div>
+            {/* draggable knob */}
+            <span
+              aria-hidden
+              className={`absolute top-1/2 size-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-mooncream shadow-md shadow-nightrose/40 transition-opacity ${
+                dragging ? "opacity-100 scale-110" : "opacity-0 group-hover/seek:opacity-100"
+              }`}
+              style={{ left: `${shownPct}%` }}
             />
           </div>
           <span className="w-10 text-[10px] tabular-nums text-mooncream/40">
